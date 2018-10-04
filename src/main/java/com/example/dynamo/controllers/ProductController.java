@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping(path="api/v1/products")
@@ -27,5 +27,17 @@ public class ProductController {
     public ResponseEntity<Iterable<ProductInfo>> get() {
         Iterable<ProductInfo> products = productInfoRepository.findAll();
         return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/searchByCost", method = RequestMethod.GET)
+    public ResponseEntity<Optional<ProductInfo>> getByCost(@RequestParam("cost") String cost) {
+        Optional<ProductInfo> product = productInfoRepository.findByCost(cost);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/searchById", method = RequestMethod.GET)
+    public ResponseEntity<Optional<ProductInfo>> getById(@RequestParam("id") String id) {
+        Optional<ProductInfo> product = productInfoRepository.findById(id);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 }
